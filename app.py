@@ -103,7 +103,12 @@ if page == "Home Page":
     )
 
     st.plotly_chart(fig)
+    st.divider()
 
+    selCrime = st.selectbox("Select Primary Type", np.sort(df_patrol['Primary Type'].unique()), width=300)
+    fig, ax = plt.subplots(figsize=(10, 8))
+    sns.scatterplot(df_patrol[df_patrol['Primary Type'] == selCrime], x='Longitude',y='Latitude', ax=ax)
+    st.plotly_chart(fig)
 elif page == "Data Clustering":
     st.subheader("Data Clustering")
     df_patrol = df_patrol[(df_patrol['Year'] > 2019) & (df_patrol['Year'] < 2026)]
@@ -215,4 +220,5 @@ elif page == "Temporal Pattern Clustering":
     st.write("Month: March - April, Sept - Oct")
     st.write("Day of the Week: Monday, Thursday and Friday")
     st.write("Hours: 5.00-7.00 PM")
+
 
