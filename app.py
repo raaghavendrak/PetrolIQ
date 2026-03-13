@@ -67,7 +67,7 @@ if page == "Home Page":
 
     st.divider()
 
-    selYear = st.selectbox("Select Year", np.sort(df_patrol['Year'].unique()), width=100)
+    selYear = st.selectbox("**Select Year**", np.sort(df_patrol['Year'].unique()), width=100)
     df = df_patrol[df_patrol['Year'] == selYear].groupby(['Month', 'Primary Type'], as_index=False)['Primary Type'].agg(['count'])
     pivot_df = df.pivot(index='Month', columns='Primary Type', values='count').reset_index()
 
@@ -105,9 +105,10 @@ if page == "Home Page":
     st.plotly_chart(fig)
     st.divider()
 
-    selCrime = st.selectbox("Select Primary Type", np.sort(df_patrol['Primary Type'].unique()), width=300)
+    selCrime = st.selectbox("**Select Primary Type**", np.sort(df_patrol['Primary Type'].unique()), width=300)
     fig, ax = plt.subplots(figsize=(10, 8))
     sns.scatterplot(df_patrol[df_patrol['Primary Type'] == selCrime], x='Longitude',y='Latitude', ax=ax)
+    ax.set_title("Primary Type distribution")
     st.plotly_chart(fig)
 elif page == "Data Clustering":
     st.subheader("Data Clustering")
@@ -133,7 +134,7 @@ elif page == "Data Clustering":
     sns.scatterplot(df, x='Longitude',y='Latitude', hue='cluster2', palette='pastel', ax=ax)
     sns.scatterplot(x=centroids['Longitude'],y=centroids['Latitude'], ax=ax)
     st.pyplot(fig)
-
+    st.subheader("Evaluate the Model")
     sample_size = st.slider("Sample size for calculationg score", 10000, 100000,len(df_patrol) ,step=10000)
     if st.button("Calculate Silhouette score"):
         df_patrol['cluster2'] = model.fit_predict(df_patrol[['X','Y']])
@@ -170,7 +171,7 @@ elif page == "PCA":
     # Sidebar for Hyperparameters
     st.sidebar.header("Model Parameters")
 
-    cols = st.multiselect("Select features: ", AllCols, default=cols)
+    cols = st.multiselect("**Select features:**", AllCols, default=cols)
     n_components = st.sidebar.slider("n_components", 1, 5, 4)
 
     # Train model
@@ -187,7 +188,7 @@ elif page == "PCA":
     st.dataframe(loadings)
 
     st.divider()
-
+    st.subheader("Feature Importance")
     importance = np.sum(
         np.abs(model.components_.T) * model.explained_variance_ratio_,
         axis=1
@@ -217,8 +218,9 @@ elif page == "Temporal Pattern Clustering":
     st.dataframe(df_timeDimCenter, hide_index=True)
 
     st.write("We can conclude that the crime is high during:")
-    st.write("Month: March - April, Sept - Oct")
-    st.write("Day of the Week: Monday, Thursday and Friday")
-    st.write("Hours: 5.00-7.00 PM")
+    st.write("**Month:** March - April, Sept - Oct")
+    st.write("**Day of the Week:** Monday, Thursday and Friday")
+    st.write("**Hours:** 5.00-7.00 PM")
+
 
 
